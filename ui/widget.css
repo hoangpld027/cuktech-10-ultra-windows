@@ -1,0 +1,228 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+  user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+}
+
+.glass-widget {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 10px 14px 12px;
+  border-radius: 8px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.04) 55%,
+    rgba(120, 200, 255, 0.07) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  overflow: hidden;
+  cursor: grab;
+}
+
+.glass-widget:active {
+  cursor: grabbing;
+}
+
+/* Specular light refraction arc */
+.glass-refraction {
+  position: absolute;
+  top: -60%;
+  left: -15%;
+  width: 130%;
+  height: 110%;
+  background: radial-gradient(
+    ellipse at 25% 15%,
+    rgba(255, 255, 255, 0.28),
+    rgba(125, 211, 252, 0.08) 45%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.w-left {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 122px;
+  height: 100%;
+}
+
+.w-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.w-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff5b69;
+  box-shadow: 0 0 8px #ff5b69;
+  flex-shrink: 0;
+}
+
+.w-dot.online {
+  background: #34d399;
+  box-shadow: 0 0 10px #34d399;
+}
+
+.w-dot.connecting {
+  background: #fbbf24;
+  box-shadow: 0 0 8px #fbbf24;
+}
+
+.w-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+}
+
+.w-rssi {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.14);
+  padding: 1px 5px;
+  border-radius: 999px;
+}
+
+.w-watts-row {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  margin: 2px 0;
+}
+
+.w-watts {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+}
+
+.w-unit {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(186, 230, 253, 0.95);
+}
+
+.w-sub {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.72);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Right side */
+.w-right {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.w-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+  flex-shrink: 0;
+  opacity: 0.65;
+  transition: opacity 0.2s;
+  -webkit-app-region: no-drag;
+}
+
+.glass-widget:hover .w-actions {
+  opacity: 1;
+}
+
+.w-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 10px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 0.15s;
+}
+
+.w-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.w-ports {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.w-port {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  padding: 5px 3px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.w-port.active {
+  background: linear-gradient(160deg, rgba(56, 189, 248, 0.28), rgba(52, 211, 153, 0.22));
+  border-color: rgba(255, 255, 255, 0.42);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.w-port .wp-name {
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.w-port.active .wp-name {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.w-port .wp-val {
+  font-size: 12px;
+  font-weight: 700;
+  margin: 2px 0 1px;
+}
+
+.w-port .wp-proto {
+  font-size: 8px;
+  font-weight: 700;
+  color: #6ee7b7;
+  height: 10px;
+  line-height: 10px;
+}

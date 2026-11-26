@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CUKTECH Widget</title>
+  <link rel="stylesheet" href="widget.css" />
+</head>
+<body>
+  <div class="glass-widget pywebview-drag-region">
+    <div class="glass-refraction"></div>
+
+    <!-- Left: Hero Power + Device Status -->
+    <div class="w-left">
+      <div class="w-header">
+        <span class="w-dot" id="wDot"></span>
+        <span class="w-title">CUKTECH 10 Ultra</span>
+        <span class="w-rssi" id="wRssi" style="display:none"></span>
+      </div>
+      <div class="w-watts-row">
+        <span class="w-watts" id="wTotal">0.0</span>
+        <span class="w-unit">W</span>
+      </div>
+      <div class="w-sub" id="wSub">Đang kết nối...</div>
+    </div>
+
+    <!-- Right: 4 Sleek Glass Port Pills -->
+    <div class="w-right">
+      <div class="w-actions no-drag">
+        <button class="w-btn" id="btnExpand" title="Mở giao diện đầy đủ">⤢</button>
+        <button class="w-btn" id="btnClose" title="Thoát">✕</button>
+      </div>
+      <div class="w-ports" id="wPorts"></div>
+    </div>
+  </div>
+  <script src="widget.js"></script>
+</body>
+</html>

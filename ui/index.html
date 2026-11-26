@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CUKTECH 10 Ultra Monitor</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Header -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-dot" id="connDot"></div>
+        <div>
+          <div class="brand-title" id="deviceName">CUKTECH 10 Ultra</div>
+          <div class="brand-sub" id="statusText">Đang khởi tạo...</div>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <span class="rssi-pill" id="rssiPill" title="Tín hiệu Bluetooth">-- dBm</span>
+        <button class="icon-btn" id="btnWidgetMode" title="Thu nhỏ thành Widget nổi">⧉</button>
+        <button class="icon-btn" id="btnReconnect" title="Kết nối lại">↻</button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="content">
+      <!-- TAB 1: MONITOR -->
+      <section class="tab-panel active" id="tab-monitor">
+        <div class="hero-card">
+          <div class="gauge-wrap">
+            <svg class="gauge-svg" viewBox="0 0 180 180">
+              <defs>
+                <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#00d4ff" />
+                  <stop offset="100%" stop-color="#00ff9d" />
+                </linearGradient>
+              </defs>
+              <circle class="gauge-bg" cx="90" cy="90" r="76" />
+              <circle class="gauge-arc" id="gaugeArc" cx="90" cy="90" r="76" />
+            </svg>
+            <div class="gauge-center">
+              <div class="gauge-watts"><span id="totalPower">0.0</span><small>W</small></div>
+              <div class="gauge-label">TỔNG CÔNG SUẤT / 120W</div>
+            </div>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-box">
+              <div class="stat-val" id="activePorts">0 / 4</div>
+              <div class="stat-lbl">Cổng đang sạc</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-val" id="todayWh">0.00 Wh</div>
+              <div class="stat-lbl">Hôm nay</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-val" id="uptimeVal">--:--</div>
+              <div class="stat-lbl">Thời gian kết nối</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title">Các cổng sạc</div>
+        <div class="ports-grid" id="portsGrid">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <div class="section-title">Biểu đồ công suất thời gian thực (3 phút)</div>
+        <div class="chart-card">
+          <canvas id="powerChart" width="420" height="170"></canvas>
+          <div class="chart-legend">
+            <span><i style="background:#00d4ff"></i>Tổng</span>
+            <span><i style="background:#00ff9d"></i>C1</span>
+            <span><i style="background:#ff9f43"></i>C2</span>
+            <span><i style="background:#a55eea"></i>C3</span>
+            <span><i style="background:#ff6b81"></i>USB-A</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: CONTROLS -->
+      <section class="tab-panel" id="tab-controls">
+        <div class="card">
+          <div class="card-title">Chế độ phân bổ công suất</div>
+          <div class="segmented" id="sceneModeGroup">
+            <button data-val="1">AI</button>
+            <button data-val="2">Apple</button>
+            <button data-val="3">Single</button>
+            <button data-val="4">Balance</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Màn hình củ sạc</div>
+          <div class="setting-row">
+            <span>Thời gian tắt màn hình</span>
+            <select id="selScreenTimeout">
+              <option value="5">1 phút</option>
+              <option value="1">5 phút</option>
+              <option value="2">10 phút</option>
+              <option value="3">30 phút</option>
+              <option value="4">Luôn sáng</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <span>Ngôn ngữ trên củ sạc</span>
+            <select id="selLanguage">
+              <option value="0">English</option>
+              <option value="1">中文</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <span>Tắt màn hình khi không tải</span>
+            <label class="switch">
+              <input type="checkbox" id="chkIdleScreen" />
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <span>Khóa xoay màn hình</span>
+            <label class="switch">
+              <input type="checkbox" id="chkScreenLock" />
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <span>USB-A chế độ dòng nhỏ</span>
+            <label class="switch">
+              <input type="checkbox" id="chkLowCurrent" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Giao thức sạc từng cổng</div>
+          <div class="proto-matrix" id="protoMatrix">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: HISTORY -->
+      <section class="tab-panel" id="tab-history">
+        <div class="card history-header">
+          <div>
+            <div class="card-title" style="margin:0">Lịch sử phiên sạc</div>
+            <div class="muted-text">Lưu tự động vào SQLite nội bộ</div>
+          </div>
+          <button class="btn-secondary" id="btnExportCsv">Xuất CSV</button>
+        </div>
+        <div id="sessionsList" class="sessions-list"></div>
+      </section>
+
+      <!-- TAB 4: SETUP -->
+      <section class="tab-panel" id="tab-setup">
+        <div class="card">
+          <div class="card-title">Tùy chọn Windows</div>
+          <div class="setting-row">
+            <span>Khởi động cùng Windows (mở Widget nổi)</span>
+            <label class="switch">
+              <input type="checkbox" id="chkAutoStart" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">1. Đăng nhập Mi Home (QR Code)</div>
+          <p class="muted-text">Quét mã QR bằng ứng dụng Mi Home trên điện thoại để tự động lấy MAC, Token và BLE Key của củ sạc Cuktech 10 Ultra.</p>
+          <div class="qr-controls">
+            <select id="qrServer">
+              <option value="cn">Trung Quốc (cn)</option>
+              <option value="sg">Singapore / Quốc tế (sg)</option>
+              <option value="de">Châu Âu (de)</option>
+              <option value="us">Mỹ (us)</option>
+              <option value="tw">Đài Loan (tw)</option>
+            </select>
+            <button class="btn-primary" id="btnStartQr">Tạo mã QR</button>
+          </div>
+          <div class="qr-box" id="qrBox" style="display:none;">
+            <img id="qrImg" alt="Mi Home QR" />
+            <div id="qrStatus" class="muted-text">Mở app Mi Home → Quét mã QR...</div>
+          </div>
+          <div id="qrDevicesList" class="devices-list"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">2. Quét Bluetooth quanh đây</div>
+          <button class="btn-secondary" id="btnScanBle" style="width:100%">Quét thiết bị BLE (4 giây)</button>
+          <div id="bleScanList" class="devices-list"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">3. Cấu hình thủ công</div>
+          <div class="form-group">
+            <label>Tên thiết bị</label>
+            <input type="text" id="cfgName" placeholder="CUKTECH 10 Ultra" />
+          </div>
+          <div class="form-group">
+            <label>Địa chỉ MAC Bluetooth</label>
+            <input type="text" id="cfgMac" placeholder="44:27:F3:06:E6:AC" />
+          </div>
+          <div class="form-group">
+            <label>MiOT Token (32 ký tự hex)</label>
+            <input type="text" id="cfgToken" placeholder="24 hex chars..." />
+          </div>
+          <div class="form-group">
+            <label>BLE Key (tùy chọn)</label>
+            <input type="text" id="cfgBleKey" placeholder="32 hex chars..." />
+          </div>
+          <button class="btn-primary" id="btnSaveCfg" style="width:100%">Lưu & Kết nối</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Bottom Navigation (Mobile App Style) -->
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-tab="monitor">
+        <span class="nav-ico">⚡</span>
+        <span>Giám sát</span>
+      </button>
+      <button class="nav-btn" data-tab="controls">
+        <span class="nav-ico">🎛️</span>
+        <span>Điều khiển</span>
+      </button>
+      <button class="nav-btn" data-tab="history">
+        <span class="nav-ico">📊</span>
+        <span>Lịch sử</span>
+      </button>
+      <button class="nav-btn" data-tab="setup">
+        <span class="nav-ico">⚙️</span>
+        <span>Kết nối</span>
+      </button>
+    </nav>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
